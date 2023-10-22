@@ -2,6 +2,9 @@ import User from '../models/user.js';
 import Movie from '../models/movie.js';
 
 export const createMovieRecommendation = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthenticated.' });
+  }
   const movieprompt = req.body;
   try {
     const newData = new Movie({ ...movieprompt, user: req.user });
@@ -43,18 +46,32 @@ export const addResults = async (req, res) => {
   }
 };
 
-export const getPromptsInLast7Days = async (req, res) => {
+export const getPromptsIn7Days = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthenticated.' });
+  }
   try {
+    // Find the user based on the current request's user ID
+    const user = await User.findById(req.user);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Calculate the date 7 days ago from the current date
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    const prompts = await Movie.find({
+    // Find the movie prompts for the user created in the last 7 days
+    const moviePrompts = await Movie.find({
+      user: user._id,
       createdAt: { $gte: sevenDaysAgo },
     });
 
-    res.json(prompts);
+    // Return the movie prompts
+    res.status(200).json(moviePrompts);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
