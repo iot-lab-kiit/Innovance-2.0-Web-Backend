@@ -35,9 +35,9 @@ const userSchema = new mongoose.Schema({
         references: "movieSchema",
         default: []
     },
-    recommendations: {
+    articlePrompts: {
         type: [mongoose.Schema.Types.ObjectId],
-        references: "recommendationSchema",
+        references: "articleSchema",
         default: []
     },
     createdAt: {
