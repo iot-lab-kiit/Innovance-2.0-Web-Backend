@@ -44,6 +44,9 @@ export const getUsers = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthenticated.' });
+  }
   const user = req.body;
   const { id } = req.params;
   try {
