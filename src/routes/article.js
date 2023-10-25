@@ -5,7 +5,7 @@ import { auth } from '../middleware/auth.js';
 const router = express.Router();
 
 router.post('/', [auth], createArticleRecommendation);
-router.put('/:id', [auth], addResults);
+router.patch('/:id', [auth], addResults);
 router.get('/latest', [auth], getPromptsIn7Days);
 
 export default router;

@@ -7,6 +7,6 @@ const router = express.Router();
 router.post('/', [auth], createMovieRecommendation);
 router.get('/latest', [auth], getPromptsIn7Days);
 router.get('/', getAllMoviePrompts);
-router.put('/:id', [auth], addResults);
+router.patch('/:id', [auth], addResults);
 
 export default router;
