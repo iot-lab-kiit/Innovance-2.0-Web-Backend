@@ -10,15 +10,14 @@ dotenv.config();
 
 const app = express();
 
-// const corsConfig = {
-//     credentials: "true",
-//     origin: "http://localhost:3000",
-//     optionSuccessStatus: "200",
-// };
+const corsConfig = {
+  credentials: "true",
+  origin: "http://localhost:3000",
+  optionSuccessStatus: "200",
+};
 
 app.use(compression());
-// app.use(cors(corsConfig));
-app.use(cors());
+app.use(cors(corsConfig));
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb" }));
@@ -27,7 +26,7 @@ app.use("/user", userRoutes);
 app.use("/movie", movieRoutes);
 app.use("/article", articleRoutes);
 app.use("/", (req, res) => {
-  res.send("api working prefectly fine.");
+  res.send("Status: OK");
 });
 
 const PORT = process.env.PORT || 3300;
