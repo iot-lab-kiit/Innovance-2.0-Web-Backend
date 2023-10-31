@@ -10,7 +10,19 @@ const articleSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    result: [String],
+    result: [{
+        position: Number,
+        title: String,
+        link: String,
+        displayed_link: String,
+        favicon: String,
+        snippet: String,
+        snippet_highlighted_words: [String],
+        about_page_link: String,
+        about_page_serpapi_link: String,
+        cached_page_link: String,
+        source: String
+      }],
     accuracy: Boolean,
     createdAt: {
         type: Date,
