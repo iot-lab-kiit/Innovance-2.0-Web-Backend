@@ -1,5 +1,36 @@
 import User from '../models/user.js';
 import Article from '../models/article.js';
+import axios from 'axios';
+import readline from 'readline';
+
+async function searchArticles(query) {
+    const params = {
+        engine: 'google',
+        q: 'Articles on ' + query,
+        api_key: 'c3648cf164f14a2278308e6816b7daea1fd6dac01fe264d9be8edc01b9197c2d'
+    };
+
+    const response = await axios.get('https://serpapi.com/search', { params });
+    const organicResults = response.data.organic_results;
+
+    return organicResults;
+}
+
+// const readLine = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout
+// });
+
+// readLine.question('Enter the topic: ', async (searchQuery) => {
+//     console.log('\nDisplaying top article links\n');
+//     const searchResults = await searchArticles(searchQuery);
+
+//     searchResults.forEach((result, i) => {
+//         console.log(`${i + 1}. ${result.title}\n${result.link}\n${result.snippet}\n`);
+//     });
+
+//     readline.close();
+// });
 
 export const createArticleRecommendation = async (req, res) => {
     if (!req.user) {
@@ -7,33 +38,13 @@ export const createArticleRecommendation = async (req, res) => {
     }
     const articleprompt = req.body.topic;
     try {
-        const newData = new Article({ prompt: articleprompt, user: req.user });
+        const searchResults = await searchArticles(articleprompt);
+        const newData = new Article({ prompt: articleprompt, result: searchResults, user: req.user });
         await newData.save();
         await User.findByIdAndUpdate(req.user, { $push: { articlePrompts: newData._id } }, { new: true });
         res.status(200).json(newData);
     } catch (error) {
         res.json({ message: error.message });
-    }
-};
-
-export const addResults = async (req, res) => {
-    if (!req.user) {
-        return res.status(401).json({ message: 'Unauthenticated.' });
-    }
-    try {
-        const { id } = req.params;
-        const { results } = req.body;
-
-        const updatedArticle = await Article.findByIdAndUpdate(
-            id,
-            { $push: { result: { $each: results } } },
-            { new: true }
-        );
-
-        res.json(updatedArticle);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
