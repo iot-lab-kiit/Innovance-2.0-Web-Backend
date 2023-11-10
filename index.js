@@ -26,7 +26,11 @@ app.use("/user", userRoutes);
 app.use("/movie", movieRoutes);
 app.use("/article", articleRoutes);
 app.use("/", (req, res) => {
-  res.send("Status: OK");
+  res.json({
+    status: "OK",
+    message: "API working fine ",
+    statusCode: 200,
+  });
 });
 
 const PORT = process.env.PORT || 3300;

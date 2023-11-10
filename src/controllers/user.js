@@ -50,14 +50,26 @@ export const getUsers = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     if (!req.user) return res.status(401).json({ message: "Unauthenticated." });
-    const { id } = jwt.verify(req.headers.authorization.split(" ")[1], "test");
     const updatedUser = await User.findByIdAndUpdate(
-      id,
+      req.user,
       { ...req.body, id },
       { new: true }
     );
     res.json(updatedUser);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: error.message });
   }
+};
+
+export const authToken = async (req, res) => {
+  if (!req.user) return res.status(401).json({ message: "Unauthenticated." });
+  const user = await User.findById(req.user);
+  if (!user) return res.status(404).json({ message: "Unauthenticatedd." });
+  return res.json({
+    message: "success",
+    name: user.name,
+    email: user.email,
+    id: user._id,
+  });
 };
