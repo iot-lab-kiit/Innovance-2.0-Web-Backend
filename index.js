@@ -4,6 +4,7 @@ import express from "express";
 import userRoutes from "./src/routes/user.js";
 import movieRoutes from "./src/routes/movie.js";
 import articleRoutes from "./src/routes/article.js";
+import fileRoutes from "./src/routes/file.js";
 import cors from "cors";
 import compression from "compression";
 dotenv.config();
@@ -25,6 +26,8 @@ app.use(express.urlencoded({ limit: "50mb" }));
 app.use("/user", userRoutes);
 app.use("/movie", movieRoutes);
 app.use("/article", articleRoutes);
+app.use("/upload", fileRoutes);
+
 app.use("/", (req, res) => {
   res.json({
     status: "OK",
@@ -34,7 +37,6 @@ app.use("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3300;
-
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() =>

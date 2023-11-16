@@ -28,7 +28,7 @@ export const authenticate = async (req, res) => {
       const token = jwt.sign(
         { email: existingUser.email, id: existingUser._id },
         "test",
-        { expiresIn: "9999 years" }
+        { expiresIn: "24h" }
       );
       res.status(200).json({ result: existingUser, token });
     }
