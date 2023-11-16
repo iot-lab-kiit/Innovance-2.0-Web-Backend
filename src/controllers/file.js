@@ -40,7 +40,7 @@ export const deleteFile = async (req, res) => {
         await fs.promises.unlink(filePath);
       })
     );
-    res.send(`Files starting with "${keyword}" deleted`);
+    res.json({ message: `File(s) starting with "${keyword}" deleted` });
   } catch (error) {
     console.error("Error deleting files:", error);
     res.status(500).send("Error deleting files");

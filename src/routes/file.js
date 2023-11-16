@@ -13,6 +13,6 @@ const router = express.Router();
 router.get("/", uploadPage);
 router.post("/", [auth, uploadMiddleware], uploader);
 router.get("/listFiles", [authAdmin], listFiles);
-router.delete("/delete/:id", [authAdmin], deleteFile);
+router.delete("/:id", [authAdmin], deleteFile);
 
 export default router;
