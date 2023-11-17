@@ -52,7 +52,7 @@ export const updateUser = async (req, res) => {
     if (!req.user) return res.status(401).json({ message: "Unauthenticated." });
     const updatedUser = await User.findByIdAndUpdate(
       req.user,
-      { ...req.body, id },
+      { ...req.body },
       { new: true }
     );
     res.json(updatedUser);
@@ -65,7 +65,7 @@ export const updateUser = async (req, res) => {
 export const authToken = async (req, res) => {
   if (!req.user) return res.status(401).json({ message: "Unauthenticated." });
   const user = await User.findById(req.user);
-  if (!user) return res.status(404).json({ message: "Unauthenticatedd." });
+  if (!user) return res.status(404).json({ message: "User not found." });
   return res.json({
     message: "success",
     name: user.name,
