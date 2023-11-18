@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "type": "module",
   "scripts": {
     "local": "nodemon index.js",
-    "dev": "yarn run compile && node build/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "shx rm -rf build/ && tsc"
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "axios": "^1.6.0",
